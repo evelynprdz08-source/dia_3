@@ -6,6 +6,12 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+if [ -n "$3" ]; then
+    echo "Error: Solo se permiten dos argumentos como máximo."
+    echo "Uso: $0 <palabra> [trayectoria]"
+    exit 1
+fi
+
 PALABRA="$1"
 TRAYECTORIA="${2:-/}"
 
