@@ -1,18 +1,32 @@
 #!/bin/bash
 
-# 1. Validar que se reciba un argumento (que no esté vacío)
 if [ -z "$1" ]; then
-    echo "Error: Debe proporcionar la ruta de una carpeta como argumento."
+    echo "Error: Debes especificar la palabra a buscar."
+    echo "Uso: $0 <palabra> [trayectoria]"
     exit 1
 fi
 
-# 2. Validar que el argumento sea una carpeta existente
-if [ ! -d "$1" ]; then
-    echo "Error: '$1' no es una carpeta o no existe."
+if [ -n "$3" ]; then
+    echo "Error: Solo se permiten dos argumentos como máximo."
+    echo "Uso: $0 <palabra> [trayectoria]"
     exit 1
 fi
 
-# 3. Lógica principal (si pasa las validaciones, hace la búsqueda)
-echo "Buscando archivos en la carpeta: $1..."
-grep -rl "home" "$1"
+PALABRA="$1"
+TRAYECTORIA="${2:-/}"
+
+if [ -n "$2" ] && [ ! -d "$2" ]; then
+    echo "Error: La trayectoria '$2' no es una carpeta o no existe."
+    exit 1
+fi
+
+echo "Buscando la palabra '$PALABRA' en: $TRAYECTORIA"
+
+RESULTADO=$(grep -rnwl "$PALABRA" "$TRAYECTORIA" 2>/dev/null)
+
+if [ -z "$RESULTADO" ]; then
+    echo "No se encontró la palabra '$PALABRA'."
+else
+    echo "$RESULTADO"
+fi
 
